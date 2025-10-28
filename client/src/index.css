@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    @apply bg-base-100 text-neutral-700 scroll-smooth;
+    font-family: 'Bahnschrift', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.vertical-text {
+    writing-mode: vertical-rl;
+}
+
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.no-spinner {
+    -moz-appearance: textfield;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none; /* IE, Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.scrollbarCustom::-webkit-scrollbar {
+    width: 10px;
+    height: 12px;
+    @apply bg-slate-200;
+}
+
+.scrollbarCustom::-webkit-scrollbar-thumb {
+    @apply bg-rose-200 rounded-full;
+}
+
+.border-inset {
+    border-style: inset;
+}
+
+.bg-secondary {
+    background: linear-gradient(
+        to right,
+        #fc0068,
+        #fc1973,
+        #fc3586,
+        #fc5294,
+        #fc6fb2,
+        #fc8ca0,
+        #fcadc8,
+        #fceaeb
+    );
+}
+
+.bg-secondary-2 {
+    background: linear-gradient(
+        135deg,
+        #dc2626,
+        #ef4444,
+        #f87171,
+        #fca5a5,
+        #fecaca
+    );
+}
+
+.bg-secondary-3 {
+    background: linear-gradient(
+        to right,
+        #b91c1c,
+        #dc2626,
+        #ef4444,
+        #f87171,
+        #fca5a5
+    );
+}
+
+.bg-secondary-4 {
+    background: linear-gradient(
+        45deg,
+        #7f1d1d,
+        #991b1b,
+        #dc2626,
+        #ef4444,
+        #f87171
+    );
+}
+
+.bg-secondary-5 {
+    background: linear-gradient(
+        135deg,
+        #7f1d1d 0%,
+        #991b1b 25%,
+        #dc2626 50%,
+        #ef4444 75%,
+        #f87171 100%
+    );
+}
+
+.bg-secondary-6 {
+    background: linear-gradient(
+        135deg,
+        #ffe5e5 0%,
+        #ff6666 25%,
+        #ff0000 50%,
+        #cc0000 75%,
+        #ffe5e5 100%
+    );
+}
+
+.bg-secondary-7 {
+    background: linear-gradient(
+        135deg,
+        #e60000 0%,
+        #cc0000 25%,
+        #e60000 50%,
+        #ff6666 75%,
+        #f87171 100%
+    );
+}
+
+.bg-secondary-8 {
+    background: linear-gradient(45deg, #fff5f5, #ffcccc, #ff6666, #cc0000);
+}
+
+.bg-primary {
+    background: linear-gradient(
+        135deg,
+        #fff8dc 0%,
+        #ffd700 25%,
+        #ffa500 50%,
+        #ffd700 75%,
+        #fff8dc 100%
+    );
+}
+
+.bg-primary-2 {
+    background: linear-gradient(
+        135deg,
+        #fff8dc 0%,
+        #ffe680 25%,
+        #ffdd99 50%,
+        #ffd700 75%,
+        #fff8dc 100%
+    );
+}
+
+.bg-primary-3 {
+    background: linear-gradient(45deg, #fff8dc, #ffe680, #ffdd99, #ffd700);
+}
+
+.bg-primary-4 {
+    background: linear-gradient(
+        135deg,
+        #fff8dc 0%,
+        #fdf6e3 25%,
+        #ffe680 50%,
+        #fdf6e3 75%,
+        #fff8dc 100%
+    );
+}
+
+.bg-primary-5 {
+    background: linear-gradient(
+        135deg,
+        #ffe680 0%,
+        #ffe680 25%,
+        #fff8dc 50%,
+        #ffe680 75%,
+        #ffe680 100%
+    );
+}
+
+.bg-primary-6 {
+    background: linear-gradient(
+        to right,
+        #fbbf24,
+        #f59e0b,
+        #d97706,
+        #b45309,
+        #92400e
+    );
+}
+
+.bg-primary-7 {
+    background: linear-gradient(
+        45deg,
+        #fff8dc,
+        #ffd700,
+        #ffa500,
+        #ff8c00,
+        #ff7f00
+    );
+}
+
+.bg-primary-8 {
+    background: linear-gradient(
+        135deg,
+        #fef3c7 0%,
+        #fde047 25%,
+        #facc15 50%,
+        #eab308 75%,
+        #ca8a04 100%
+    );
+}
+
+.bg-primary-9 {
+    background: linear-gradient(
+        to bottom,
+        #fffbeb,
+        #fef3c7,
+        #fde047,
+        #facc15,
+        #eab308
+    );
+}
+
+.bg-primary-10 {
+    background: linear-gradient(
+        135deg,
+        #ca8a04 0%,
+        #eab308 25%,
+        #facc15 50%,
+        #fde047 75%,
+        #fef3c7 100%
+    );
+}
