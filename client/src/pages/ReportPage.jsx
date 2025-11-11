@@ -55,7 +55,6 @@ ChartJS.register(
 
 const statusOptions = [
     { value: '', label: 'Tất cả' },
-    { value: 'Thanh toán khi giao hàng', label: 'Thanh toán khi giao hàng' },
     { value: 'Đang chờ thanh toán', label: 'Đang chờ thanh toán' },
     { value: 'Đã thanh toán', label: 'Đã thanh toán' },
 ];
@@ -78,6 +77,7 @@ const ReportPage = () => {
         startDate: '',
         endDate: '',
     });
+    const [dateError, setDateError] = useState('');
 
     const [sortConfig, setSortConfig] = useState({
         key: 'createdAt',
@@ -158,14 +158,38 @@ const ReportPage = () => {
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
+
         if (name === 'dateRange') {
             setDateRange(value);
-        } else {
-            setFilters((prev) => ({
-                ...prev,
-                [name]: value,
-            }));
+            return;
         }
+
+        // Tạo đối tượng filters mới để kiểm tra
+        const newFilters = {
+            ...filters,
+            [name]: value,
+        };
+
+        // Kiểm tra nếu cả hai ngày đều có giá trị
+        if (name === 'startDate' || name === 'endDate') {
+            if (newFilters.startDate && newFilters.endDate) {
+                const startDate = new Date(newFilters.startDate);
+                const endDate = new Date(newFilters.endDate);
+
+                if (startDate > endDate) {
+                    setDateError(
+                        'Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc'
+                    );
+                    return; // Không cập nhật filters nếu ngày không hợp lệ
+                }
+            }
+        }
+
+        // Nếu kiểm tra hợp lệ, xóa thông báo lỗi và cập nhật filters
+        setDateError('');
+        setFilters(newFilters);
+        // Reset về trang đầu tiên khi thay đổi bộ lọc
+        setPagination((prev) => ({ ...prev, currentPage: 1 }));
     };
 
     const handleSort = (key) => {
@@ -183,25 +207,37 @@ const ReportPage = () => {
             const searchLower = filters.search.trim().toLowerCase();
 
             result = result.filter((order) => {
-                // Get all searchable fields
                 const searchFields = [
                     order.orderId,
                     order.userId?.name,
                     order.userId?.email,
+                    // Tìm kiếm số điện thoại ở cả hai vị trí
                     order.userId?.mobile,
-                    order.product_details?.name,
+                    order.delivery_address?.mobile,
+                    // Tìm kiếm số điện thoại không có khoảng trắng
+                    order.userId?.mobile?.replace(/\s+/g, ''),
+                    order.delivery_address?.mobile?.replace(/\s+/g, ''),
                     order.payment_status,
+                    // Tìm kiếm thông tin địa chỉ
                     order.delivery_address?.city,
                     order.delivery_address?.district,
                     order.delivery_address?.ward,
                     order.delivery_address?.address,
-                ]
-                    .filter(Boolean)
-                    .map((field) => field?.toLowerCase() || '');
+                    // Tìm kiếm thông tin sản phẩm
+                    ...(order.products?.flatMap((product) => [
+                        product.name,
+                        product.sku,
+                        product.brand,
+                        product.category?.name,
+                    ]) || []),
+                    // Fallback cho product_details nếu không có mảng products
+                    order.product_details?.name,
+                    order.product_details?.brand,
+                    order.product_details?.category,
+                ].filter(Boolean);
 
-                // Check if any field includes the search term
-                return searchFields.some(
-                    (field) => field && field.includes(searchLower)
+                return searchFields.some((field) =>
+                    String(field).toLowerCase().includes(searchLower)
                 );
             });
         }
@@ -415,18 +451,20 @@ const ReportPage = () => {
         );
     };
 
-    const handleResetFilters = () => {
+    const resetFilters = () => {
         setFilters({
             search: '',
             status: '',
             startDate: '',
             endDate: '',
         });
-        setDateRange('');
-        setPagination({
-            currentPage: 1,
-            pageSize: 10,
-        });
+        setDateRange('7days');
+        setDateError('');
+        setPagination((prev) => ({ ...prev, currentPage: 1 }));
+    };
+
+    const handleResetFilters = () => {
+        resetFilters();
     };
 
     const renderSortIcon = (key) => {
@@ -889,9 +927,14 @@ const ReportPage = () => {
                             <input
                                 type="date"
                                 name="startDate"
-                                className="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 w-full"
-                                value={filters.startDate}
+                                className={`w-full p-2 border ${
+                                    dateError
+                                        ? 'border-red-500'
+                                        : 'border-gray-300'
+                                } rounded-md focus:outline-none focus:ring-1 focus:ring-secondary-200`}
+                                value={filters.startDate?.split('T')[0] || ''}
                                 onChange={handleFilterChange}
+                                max={filters.endDate?.split('T')[0] || ''}
                             />
                         </div>
                         <div>
@@ -901,10 +944,20 @@ const ReportPage = () => {
                             <input
                                 type="date"
                                 name="endDate"
-                                className="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 w-full"
-                                value={filters.endDate}
+                                className={`w-full p-2 border ${
+                                    dateError
+                                        ? 'border-red-500'
+                                        : 'border-gray-300'
+                                } rounded-md focus:outline-none focus:ring-1 focus:ring-secondary-200`}
+                                value={filters.endDate?.split('T')[0] || ''}
                                 onChange={handleFilterChange}
+                                min={filters.startDate?.split('T')[0] || ''}
                             />
+                            {dateError && (
+                                <p className="mt-1 text-sm text-red-500">
+                                    {dateError}
+                                </p>
+                            )}
                         </div>
                     </div>
                 )}
